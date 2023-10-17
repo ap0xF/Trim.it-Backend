@@ -1,0 +1,6 @@
+applicationType: grpc
+defaultPackage: com.syano
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle_kotlin
+features: [ app-name, data, data-jpa, discovery-core, gradle, grpc, http-client-test, java, java-application, jdbc-hikari, junit, logback, micronaut-aop, micronaut-build, postgres, properties, readme, security-annotations, security-jwt, serialization-jackson, shade, test-resources ]

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.syano";
+option java_outer_classname = "Syano_url_shortener";
+option objc_class_prefix = "HLW";
+
+package com.syano;
+
+service Syano_url_shortenerService {
+  rpc send (Syano_url_shortenerRequest) returns (Syano_url_shortenerReply) {}
+}
+
+message Syano_url_shortenerRequest {
+  string name = 1;
+}
+
+message Syano_url_shortenerReply {
+  string message = 1;
+}
