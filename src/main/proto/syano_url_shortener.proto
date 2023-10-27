@@ -7,14 +7,73 @@ option objc_class_prefix = "HLW";
 
 package com.syano;
 
-service Syano_url_shortenerService {
-  rpc send (Syano_url_shortenerRequest) returns (Syano_url_shortenerReply) {}
+import "google/protobuf/timestamp.proto";
+
+// Represents a URL entity with its associated attributes
+message UrlEntity {
+  int32 id = 1;                  // Unique identifier for the URL entity
+  string longUrl = 2;            // The original long URL
+  string shortUrl = 3;           // The generated shortened URL
+  google.protobuf.Timestamp createdAt = 4;  // Timestamp when the URL was created
+  google.protobuf.Timestamp updatedAt = 5;  // Timestamp of the last update
+  int32 clickCount = 6;          // Number of times the shortened URL has been clicked
+  google.protobuf.Timestamp expirationTime = 7;  // Expiration time for the shortened URL
 }
 
-message Syano_url_shortenerRequest {
-  string name = 1;
+// Service for managing URL entities
+service UrlService {
+  // Create a new URL entity
+  rpc CreateUrl (CreateUrlRequest) returns (CreateUrlResponse);
+
+  // Retrieve a URL entity by its ID
+  rpc GetUrl (GetUrlRequest) returns (GetUrlResponse);
+
+  // Update an existing URL entity
+  rpc UpdateUrl (UpdateUrlRequest) returns (UpdateUrlResponse);
+
+  // Delete a URL entity by its ID
+  rpc DeleteUrl (DeleteUrlRequest) returns (DeleteUrlResponse);
 }
 
-message Syano_url_shortenerReply {
-  string message = 1;
+// Request message for creating a new URL entity
+message CreateUrlRequest {
+  string longUrl = 1;
+}
+
+// Response message for creating a new URL entity
+message CreateUrlResponse {
+  UrlEntity urlEntity = 1;
+}
+
+// Request message for retrieving a URL entity
+message GetUrlRequest {
+  int32 id = 1;
+}
+
+// Response message for retrieving a URL entity
+message GetUrlResponse {
+  UrlEntity urlEntity = 1;
+}
+
+// Request message for updating an existing URL entity
+message UpdateUrlRequest {
+  int32 id = 1;
+  string longUrl = 2;
+  string shortUrl = 3;
+  google.protobuf.Timestamp expirationTime = 4;
+}
+
+// Response message for updating an existing URL entity
+message UpdateUrlResponse {
+  UrlEntity urlEntity = 1;
+}
+
+// Request message for deleting a URL entity
+message DeleteUrlRequest {
+  int32 id = 1;
+}
+
+// Response message for deleting a URL entity
+message DeleteUrlResponse {
+  bool success = 1;
 }
