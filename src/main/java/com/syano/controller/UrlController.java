@@ -5,10 +5,19 @@ import com.syano.repository.UrlRepository;
 import io.micronaut.data.annotation.GeneratedValue;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
 import jakarta.inject.Inject;
+import org.bson.types.ObjectId;
+
+import java.util.Optional;
 
 @Controller("/")
 public class UrlController {
     @Inject
     private UrlRepository urlRepository;
+
+    @Get("/{id}")
+    public Optional<UrlEntity> findById(@PathVariable ObjectId id) {
+        return urlRepository.findById(id);
+    }
 }

@@ -1,10 +1,18 @@
 package com.syano.repository;
 
 import com.syano.model.UrlEntity;
+import io.micronaut.data.annotation.Query;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.jpa.repository.JpaRepository;
+import io.micronaut.data.mongodb.annotation.MongoRepository;
+import io.micronaut.data.mongodb.annotation.*;
 
-@Repository
-public interface UrlRepository extends JpaRepository<UrlEntity, Integer> {
+import jakarta.validation.constraints.NotNull;
+import org.bson.types.ObjectId;
 
+import java.util.Optional;
+
+@MongoRepository
+public interface UrlRepository extends JpaRepository<UrlEntity, ObjectId> {
+    public Optional<UrlEntity> findById(ObjectId id);
 }
