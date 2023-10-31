@@ -47,12 +47,12 @@ message CreateUrlResponse {
 
 // Request message for retrieving a URL entity
 message GetUrlRequest {
-  int32 id = 1;
+  string shortUrl = 1;
 }
 
 // Response message for retrieving a URL entity
 message GetUrlResponse {
-  Entity entity = 1;
+  string longUrl = 1;
 }
 
 // Request message for updating an existing URL entity
