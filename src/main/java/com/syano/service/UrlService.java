@@ -1,16 +1,22 @@
 package com.syano.service;
 
+import com.nimbusds.jose.util.Base64URL;
 import com.syano.*;
 import com.syano.model.UrlEntity;
 import com.syano.repository.UrlRepository;
 import io.grpc.stub.StreamObserver;
+import io.seruco.encoding.base62.Base62;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import com.google.protobuf.Timestamp;
 import org.bson.types.ObjectId;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.Base64;
 
 @Singleton
 public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
@@ -36,27 +42,64 @@ public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
 //        urlEntity.setExpirationTime(Instant.ofEpochSecond(entity.getExpirationTime().getSeconds(), entity.getExpirationTime().getNanos()));
 
 
-
         // logic to create short url from the given long url
+        // To-Do:
+            // - url validation
 
+
+        // 1. generating hash of long url using sha-256
+        byte[] hash = new byte[0]; // creating empty array of byte.
+        StringBuilder hexOfHash = new StringBuilder();
+        String short_url = "";
+        if(!urlEntity.getLongUrl().isEmpty()){
+            String long_url = urlEntity.getLongUrl();
+            System.out.println(long_url);
+            try{
+                MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+                hash = messageDigest.digest(long_url.getBytes(StandardCharsets.UTF_8));
+            } catch (Exception e){
+                throw new RuntimeException(e);
+            }
+
+            for(byte b: hash){
+                hexOfHash.append(String.format("%02x", b));
+            }
+
+//            System.out.println(hexOfHash);
+
+//            System.out.println(hexOfHash);
+
+            // implement base62 encoding to the hex value.
+            Base62 base62 = Base62.createInstance();
+            System.out.println(hexOfHash);
+            String base = base62.encode(hexOfHash.toString().getBytes()).toString();
+
+            short_url = "localhost:50051/"+base.substring(3);
+            System.out.println(short_url);
+        }
+
+        // convert hash to hex value
+
+
+//        System.out.println(Arrays.toString(hash));
 
         urlRepository.save(urlEntity);
 
-
-
+        // sending back response through grpc.
         CreateUrlResponse createUrlResponse = CreateUrlResponse.newBuilder()
                 .setEntity(entity)
                 .build();
 
         responseObserver.onNext(createUrlResponse);
-//         Instead of sending out grpc response I need to create the short url here.
         responseObserver.onCompleted();
 
     }
 
     @Override
-    public void getUrl(GetUrlRequest request, StreamObserver<GetUrlResponse> responseObserver) {
+    public void getUrl(GetUrlRequest getUrlRequest, StreamObserver<GetUrlResponse> responseObserver) {
 //        super.getUrl(request, responseObserver);
+//        Entity entity = Entity.newBuilder()
+//                .setShortUrl(getUrlRequest)
 
     }
 
