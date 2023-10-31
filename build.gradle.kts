@@ -32,6 +32,10 @@ dependencies {
     implementation("io.micronaut.data:micronaut-data-mongodb")
     runtimeOnly("org.mongodb:mongodb-driver-sync")
 
+    // third-party depndency for base62 encoding
+    implementation("io.seruco.encoding:base62:0.1.3")
+
+
 }
 
 
