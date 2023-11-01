@@ -16,8 +16,4 @@ public class UrlController {
     @Inject
     private UrlRepository urlRepository;
 
-    @Get("/{id}")
-    public Optional<UrlEntity> findById(@PathVariable ObjectId id) {
-        return urlRepository.findById(id);
-    }
 }

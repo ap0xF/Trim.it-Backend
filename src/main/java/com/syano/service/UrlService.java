@@ -53,7 +53,7 @@ public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
         String short_url = "";
         if(!urlEntity.getLongUrl().isEmpty()){
             String long_url = urlEntity.getLongUrl();
-            System.out.println(long_url);
+//            System.out.println(long_url);
             try{
                 MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
                 hash = messageDigest.digest(long_url.getBytes(StandardCharsets.UTF_8));
@@ -71,17 +71,14 @@ public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
 
             // implement base62 encoding to the hex value.
             Base62 base62 = Base62.createInstance();
-            System.out.println(hexOfHash);
+//            System.out.println(hexOfHash);
             String base = base62.encode(hexOfHash.toString().getBytes()).toString();
 
-            short_url = "localhost:50051/"+base.substring(3);
+            short_url = base.substring(3);
             System.out.println(short_url);
         }
-
-        // convert hash to hex value
-
-
-//        System.out.println(Arrays.toString(hash));
+        // adding shortUrl to db
+        urlEntity.setShortUrl(short_url);
 
         urlRepository.save(urlEntity);
 
@@ -97,16 +94,34 @@ public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
 
     @Override
     public void getUrl(GetUrlRequest getUrlRequest, StreamObserver<GetUrlResponse> responseObserver) {
-//        super.getUrl(request, responseObserver);
-//        Entity entity = Entity.newBuilder()
-//                .setShortUrl(getUrlRequest)
+        // user le short url browser ma halesi teslai resolve garera long url dini kaam yesko ho.
+        Entity entity = Entity.newBuilder()
+                .setShortUrl(getUrlRequest.getShortUrl())
+                .build();
 
+        System.out.println(getUrlRequest.getShortUrl().isEmpty());
+
+
+        String longUrl = "";
+        UrlEntity urlEntity = urlRepository.findByShortUrl(entity.getShortUrl());
+        if (urlEntity == null) {
+            System.out.println("kei ni aayena db bata");
+        }
+        assert urlEntity != null;
+        longUrl =  urlEntity.getLongUrl();
+
+        GetUrlResponse getUrlResponse = GetUrlResponse.newBuilder()
+                .setLongUrl(longUrl)
+                .build();
+
+        responseObserver.onNext(getUrlResponse);
+        responseObserver.onCompleted();
     }
 
-//    @Override
-//    public void updateUrl(UpdateUrlRequest request, StreamObserver<UpdateUrlResponse> responseObserver) {
-//        super.updateUrl(request, responseObserver);
-//    }
+    @Override
+    public void updateUrl(UpdateUrlRequest request, StreamObserver<UpdateUrlResponse> responseObserver) {
+        super.updateUrl(request, responseObserver);
+    }
 
 //    @Override
 //    public void deleteUrl(DeleteUrlRequest request, StreamObserver<DeleteUrlResponse> responseObserver) {
