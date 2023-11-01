@@ -70,7 +70,7 @@ message UpdateUrlResponse {
 
 // Request message for deleting a URL entity
 message DeleteUrlRequest {
-  string longUrl = 1;
+  string shortUrl = 1;
 }
 
 // Response message for deleting a URL entity
