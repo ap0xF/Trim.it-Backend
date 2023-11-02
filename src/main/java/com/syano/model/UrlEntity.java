@@ -1,17 +1,9 @@
 package com.syano.model;
 
-import com.google.protobuf.Timestamp;
 import io.micronaut.data.annotation.*;
-
-import io.micronaut.data.model.query.QueryModel;
-import jakarta.persistence.GenerationType;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import org.bson.types.ObjectId;
-import org.hibernate.boot.registry.selector.spi.StrategyCreator;
-
 import java.time.Instant;
-import org.bson.*;
 
 @MappedEntity
 public class UrlEntity {
@@ -77,7 +69,5 @@ public class UrlEntity {
     public void setClickCount(int clickCount) {
         this.clickCount = clickCount;
     }
-
-
 }
 
