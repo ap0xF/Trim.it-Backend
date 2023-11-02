@@ -19,6 +19,7 @@ message Entity {
   google.protobuf.Timestamp expirationTime = 7;  // Expiration time for the shortened URL
 }
 
+
 // Service for managing URL entities
 service UrlService {
   // Create a new URL entity
@@ -75,5 +76,5 @@ message DeleteUrlRequest {
 
 // Response message for deleting a URL entity
 message DeleteUrlResponse {
-  bool success = 1;
+  string status = 1;
 }
