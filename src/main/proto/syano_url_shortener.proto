@@ -7,16 +7,19 @@ option objc_class_prefix = "HLW";
 
 package com.syano;
 
-import "google/protobuf/timestamp.proto";
+// import "google/protobuf/timestamp.proto";
 
 // Represents a URL entity with its associated attributes
 message Entity {
   string longUrl = 2;            // The original long URL
   string shortUrl = 3;           // The generated shortened URL
-  google.protobuf.Timestamp createdAt = 4;  // Timestamp when the URL was created
-  google.protobuf.Timestamp updatedAt = 5;  // Timestamp of the last update
+  Timestamp createdAt = 4;       // Timestamp when the URL was created
+  Timestamp updatedAt = 5;       // Timestamp of the last update
+  // google.protobuf.Timestamp createdAt = 4;  // Timestamp when the URL was created
+  // google.protobuf.Timestamp updatedAt = 5;  // Timestamp of the last update
   int32 clickCount = 6;          // Number of times the shortened URL has been clicked
-  google.protobuf.Timestamp expirationTime = 7;  // Expiration time for the shortened URL
+  // google.protobuf.Timestamp expirationTime = 7;  // Expiration time for the shortened URL
+  string expirationTime = 7;  // Expiration time for the shortened URL
 }
 
 
@@ -38,7 +41,8 @@ service UrlService {
 // Request message for creating a new URL entity
 message CreateUrlRequest {
   string longUrl = 1;
-//  google.protobuf.Timestamp expirationTime = 2;
+  //  google.protobuf.Timestamp expirationTime = 2;
+  Timestamp expirationTime = 2;
 }
 
 // Response message for creating a new URL entity
@@ -61,7 +65,8 @@ message UpdateUrlRequest {
   int32 id = 1;
   string longUrl = 2;
   string shortUrl = 3;
-  google.protobuf.Timestamp expirationTime = 4;
+  // google.protobuf.Timestamp expirationTime = 4;
+  Timestamp expirationTime = 4;
 }
 
 // Response message for updating an existing URL entity
@@ -77,4 +82,9 @@ message DeleteUrlRequest {
 // Response message for deleting a URL entity
 message DeleteUrlResponse {
   string status = 1;
+}
+
+message Timestamp{
+  int64 seconds = 1;
+  string time_zone = 2;
 }
