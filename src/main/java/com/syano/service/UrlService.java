@@ -29,6 +29,7 @@ public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
                     .build();
             UrlEntity urlEntity = new UrlEntity();
             urlEntity.setLongUrl(entity.getLongUrl());
+            System.out.println(entity.getLongUrl());
 
 //            expiration time ko lagi ali pachhi kaam garchhu.
 //        urlEntity.setExpirationTime(Instant.ofEpochSecond(entity.getExpirationTime().getSeconds(), entity.getExpirationTime().getNanos()));
@@ -68,9 +69,16 @@ public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
 
             urlRepository.save(urlEntity);
 
+//             creating entity to send back to user
+            Entity entityToBeSent = Entity.newBuilder()
+                    .setLongUrl(urlEntity.getLongUrl())
+                    .setShortUrl(urlEntity.getShortUrl())
+//                .setExpirationTime(Timestamp.newBuilder().setSeconds(urlEntity.getExpirationTime().getEpochSecond()).setNanos(urlEntity.getExpirationTime().getNano()).build())
+                    .build();
+
 //             sending back response through grpc.
             CreateUrlResponse createUrlResponse = CreateUrlResponse.newBuilder()
-                    .setEntity(entity)
+                    .setEntity(entityToBeSent)
                     .build();
 
             responseObserver.onNext(createUrlResponse);
