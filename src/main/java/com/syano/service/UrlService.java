@@ -14,6 +14,7 @@ import org.bson.types.ObjectId;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.Objects;
 
 @Singleton
 public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
@@ -23,12 +24,12 @@ public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
 
     @Override
     public void createUrl(CreateUrlRequest createUrlRequest, StreamObserver<CreateUrlResponse> responseObserver) {
-
+        String longUrl = createUrlRequest.getLongUrl();
 //        user bata longURL ra Expiration Time lini
 //        Check if the given longUrl is already in db, then update the shorturl of the corressponding document.
-        if(!createUrlRequest.getLongUrl().isEmpty()){
+        if(!longUrl.isEmpty()){
             Entity entity = Entity.newBuilder()
-                    .setLongUrl(createUrlRequest.getLongUrl())
+                    .setLongUrl(longUrl)
 //                .setExpirationTime(createUrlRequest.getExpirationTime())
                     .build();
             UrlEntity urlEntity = new UrlEntity();
@@ -69,8 +70,14 @@ public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
             }
 //             adding shortUrl to db
             urlEntity.setShortUrl(short_url);
+            try{
+                if(Objects.equals(urlRepository.findByLongUrl(longUrl).getLongUrl(), longUrl)){
+                    urlRepository.updateByLongUrl(longUrl, short_url);
+                }
+            } catch (EmptyResultException emptyResultException){
+                urlRepository.save(urlEntity);
+            }
 
-            urlRepository.save(urlEntity);
 
 //             creating entity to send back to user
             Entity entityToBeSent = Entity.newBuilder()

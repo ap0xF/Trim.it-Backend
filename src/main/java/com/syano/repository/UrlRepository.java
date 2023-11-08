@@ -14,5 +14,10 @@ public interface UrlRepository extends JpaRepository<UrlEntity, ObjectId> {
     Optional<UrlEntity> findById(ObjectId id); // because findById expects
     // data type of Integer and ObjectId is a 12 bit data type used in mongodb.  //need more research on this.
     UrlEntity findByShortUrl(String shortUrl);
+
+    UrlEntity findByLongUrl(String longUrl); // to check if long url already exists in db.
+
+    void updateByLongUrl(String longUrl, String shortUrl);
     void deleteByShortUrl(String shortUrl);
+
 }
