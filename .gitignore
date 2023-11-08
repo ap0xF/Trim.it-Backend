@@ -13,3 +13,6 @@ out/
 .settings
 .classpath
 .factorypath
+.metadata
+# add googleapis folder to git ignore.
+googleapis/
