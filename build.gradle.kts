@@ -16,13 +16,13 @@ repositories {
 
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
-    annotationProcessor("io.micronaut.security:micronaut-security-annotations")
+//    annotationProcessor("io.micronaut.security:micronaut-security-annotations")
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut:micronaut-aop")
     implementation("io.micronaut:micronaut-discovery-core")
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
     implementation("io.micronaut.grpc:micronaut-grpc-runtime")
-    implementation("io.micronaut.security:micronaut-security-jwt")
+//    implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("javax.annotation:javax.annotation-api")
@@ -75,11 +75,14 @@ protobuf {
     }
 }
 micronaut {
+    runtime("netty")
     testRuntime("junit5")
     processing {
         incremental(true)
         annotations("com.syano.*")
     }
+
+
 }
 
 
