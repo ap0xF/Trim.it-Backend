@@ -7,6 +7,8 @@ option objc_class_prefix = "HLW";
 
 package com.syano;
 
+import "google/api/annotations.proto";
+
 // import "google/protobuf/timestamp.proto";
 
 // Represents a URL entity with its associated attributes
