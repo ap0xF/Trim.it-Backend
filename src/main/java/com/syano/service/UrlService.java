@@ -9,6 +9,9 @@ import io.micronaut.data.exceptions.EmptyResultException;
 import io.seruco.encoding.base62.Base62;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import jakarta.validation.constraints.NotNull;
+import org.bson.types.ObjectId;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
@@ -22,6 +25,7 @@ public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
     public void createUrl(CreateUrlRequest createUrlRequest, StreamObserver<CreateUrlResponse> responseObserver) {
 
 //        user bata longURL ra Expiration Time lini
+//        Check if the given longUrl is already in db, then update the shorturl of the corressponding document.
         if(!createUrlRequest.getLongUrl().isEmpty()){
             Entity entity = Entity.newBuilder()
                     .setLongUrl(createUrlRequest.getLongUrl())
@@ -29,7 +33,7 @@ public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
                     .build();
             UrlEntity urlEntity = new UrlEntity();
             urlEntity.setLongUrl(entity.getLongUrl());
-            System.out.println(entity.getLongUrl());
+//            System.out.println(entity.getLongUrl());
 
 //            expiration time ko lagi ali pachhi kaam garchhu.
 //        urlEntity.setExpirationTime(Instant.ofEpochSecond(entity.getExpirationTime().getSeconds(), entity.getExpirationTime().getNanos()));
@@ -62,7 +66,6 @@ public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
                 String base = base62.encode(hexOfHash.toString().getBytes()).toString();
 
                 short_url = base.substring(3);
-                System.out.println(short_url);
             }
 //             adding shortUrl to db
             urlEntity.setShortUrl(short_url);
@@ -94,6 +97,7 @@ public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
     @Override
     public void getUrl(GetUrlRequest getUrlRequest, StreamObserver<GetUrlResponse> responseObserver) {
 //         user le short url browser ma halesi teslai resolve garera long url dini kaam yesko ho.
+//        System.out.println(getUrlRequest.getShortUrl());
         if(!getUrlRequest.getShortUrl().isEmpty()){
             Entity entity = Entity.newBuilder()
                     .setShortUrl(getUrlRequest.getShortUrl())
@@ -119,6 +123,14 @@ public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
         else{
             Status status = Status.INTERNAL.withDescription("Empty URL provided");
             responseObserver.onError(status.asRuntimeException());
+        }
+    }
+
+    public String getLongUrl(String shortUrl){
+        try{
+            return urlRepository.findByShortUrl(shortUrl).getLongUrl();
+        } catch (EmptyResultException emptyResultException){
+            return "Long URL not found in database";
         }
     }
 
