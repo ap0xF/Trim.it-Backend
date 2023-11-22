@@ -1,6 +1,5 @@
 package com.syano.model;
 
-import com.google.protobuf.ByteString;
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import jakarta.inject.Singleton;
