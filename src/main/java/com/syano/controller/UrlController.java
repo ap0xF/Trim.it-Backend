@@ -20,8 +20,14 @@ public class UrlController {
     @Get("/{path}")
     public HttpResponse<?> redirect(String path) {
         String longUrl = urlService.getLongUrl(path);
-        System.out.println(longUrl);
-        URI uri = URI.create(longUrl);
-        return HttpResponse.redirect(uri);
+        try{
+            URI uri = URI.create(longUrl);
+            return HttpResponse.redirect(uri);
+        } catch (Exception e){
+            LOG.error("Error while parsing url: {}", longUrl);
+            return HttpResponse.badRequest();
+        }
+
+
     }
 }
