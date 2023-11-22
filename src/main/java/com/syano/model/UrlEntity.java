@@ -18,6 +18,15 @@ public class UrlEntity {
         this.id = id;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    private String email;
     @NotNull
     private String longUrl;
     @NotNull
@@ -69,5 +78,6 @@ public class UrlEntity {
     public void setClickCount(int clickCount) {
         this.clickCount = clickCount;
     }
+
 }
 
