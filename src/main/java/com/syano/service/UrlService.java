@@ -176,7 +176,8 @@ public class UrlService extends UrlServiceGrpc.UrlServiceImplBase {
     @Override
     public void deleteUrl(DeleteUrlRequest deleteUrlRequest, StreamObserver<DeleteUrlResponse> responseObserver) {
         if(!deleteUrlRequest.getShortUrl().isEmpty() && !deleteUrlRequest.getEmail().isEmpty()){
-            String shortUrl = deleteUrlRequest.getShortUrl().substring(15);
+            String shortUrl = deleteUrlRequest.getShortUrl().substring(20);
+            System.out.println(deleteUrlRequest.getShortUrl().substring(20));
             try{
                 if(!urlRepository.findByShortUrl(shortUrl).getLongUrl().isEmpty()){
 
