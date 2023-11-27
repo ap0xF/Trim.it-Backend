@@ -1,0 +1,14 @@
+version: '3'
+services:
+  backend:
+    restart: always
+    image: url_short:latest
+    depends_on:
+      - mongo
+    ports:
+      - 50051:50051
+  mongo:
+    restart: always
+    image: mongo:latest
+    ports:
+      - 27017:27017
