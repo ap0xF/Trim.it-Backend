@@ -81,8 +81,6 @@ micronaut {
         incremental(true)
         annotations("com.syano.*")
     }
-
-
 }
 
 
